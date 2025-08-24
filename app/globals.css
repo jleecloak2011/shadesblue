@@ -1,26 +1,78 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer utilities {
+  /* Base text scaling on the html element */
+  .a11y-lgtext { font-size: 112.5%; }  /* ≈18px base */
+  .a11y-xltext { font-size: 125%; }    /* ≈20px base */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Underline all links for clarity */
+  .a11y-underline-links a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  /* High contrast theme */
+  .a11y-high-contrast body {
+    background: #000 !important;
+    color: #fff !important;
+  }
+  .a11y-high-contrast a { color: #00e5ff !important; }
+  .a11y-high-contrast * { border-color: #fff !important; }
+  .a11y-high-contrast :focus-visible {
+    outline: 3px solid #ff0 !important;
+    outline-offset: 2px;
+  }
+
+  /* Reduce motion */
+  .a11y-reduce-motion * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Also respect the user's OS preference by default */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* Keep your existing dark mode, etc. */
+
+
+@layer components {
+
+  /* Solid, slightly textured dark header that works in light & dark mode */
+  .sb-header-dark {
+    background-color: #3b5382; /* deep navy */
+    /* subtle brand-tinted glow near the top */
+    background-image:
+      radial-gradient(1200px 200px at 20% -100px, rgba(14, 118, 187, 0.22), transparent),
+      radial-gradient(1000px 180px at 80% -120px, rgba(45, 64, 92, 0.25), transparent);
+  }
+
+  .sb-header {
+    background-image: url("/images/header-bg.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+}
+
+
+/* Optional: simple dark-mode helper */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Nice base background for light/dark */
+html, body { height: 100%; }
+body { background: theme(colors.slate.50); }
+.dark body { background: theme(colors.slate.950); }
+
+@layer components {
+  .sb-header {
+    background-image: url("https://www.shadesblue.com/new/img/2019/header-bg.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
 }
