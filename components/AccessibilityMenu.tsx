@@ -31,14 +31,16 @@ function applyToDocument(s: A11yState) {
 export default function AccessibilityMenu() {
   const [open, setOpen] = useState(false);
   const [state, setState] = useState<A11yState>(DEFAULTS);
+  const [mounted, setMounted] = useState(false);
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const firstControlRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const liveRef = useRef<HTMLDivElement>(null);
 
-  // Load → apply
+  // Load saved state after mount to avoid hydration mismatch
   useEffect(() => {
+    setMounted(true);
     try {
       const saved = localStorage.getItem(KEY);
       const parsed = saved ? { ...DEFAULTS, ...JSON.parse(saved) } : DEFAULTS;
@@ -47,13 +49,14 @@ export default function AccessibilityMenu() {
     } catch {}
   }, []);
 
-  // Save → apply
+  // Save → apply (only after mounted to avoid hydration issues)
   useEffect(() => {
+    if (!mounted) return;
     try {
       localStorage.setItem(KEY, JSON.stringify(state));
       applyToDocument(state);
     } catch {}
-  }, [state]);
+  }, [state, mounted]);
 
   // Alt+Shift+A opens
   useEffect(() => {
@@ -138,7 +141,7 @@ export default function AccessibilityMenu() {
         ref={triggerRef}
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-4 right-4 z-40 rounded-2xl border bg-white/90 dark:bg-slate-900/90 px-4 py-2 text-sm shadow hover:bg-white dark:hover:bg-slate-800"
+        className="fixed bottom-4 right-4 z-40 rounded-2xl border bg-white/90 dark:bg-slate-900/90 px-4 py-2 text-sm shadow hover:bg-white dark:hover:bg-slate-800 dark:text-white"
         aria-haspopup="dialog"
         aria-controls="a11y-menu"
         aria-expanded={open}
@@ -160,7 +163,7 @@ export default function AccessibilityMenu() {
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="rounded-xl border px-3 py-1.5 text-sm hover:bg-slate-50 dark:hover:bg-slate-800"
+                className="rounded-xl border px-3 py-1.5 text-sm hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-white"
               >
                 Close
               </button>
@@ -173,17 +176,17 @@ export default function AccessibilityMenu() {
                 <div className="mt-2 flex gap-2">
                   <button
                     ref={firstControlRef}
-                    className={`rounded-xl border px-3 py-1.5 ${textActive === 'normal' ? 'bg-slate-100 dark:bg-slate-800' : 'hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                    className={`rounded-xl border px-3 py-1.5 ${textActive === 'normal' ? 'bg-slate-100 dark:bg-slate-800 dark:text-white' : 'hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-slate-100'}`}
                     onClick={() => setText('normal')}
                     aria-pressed={textActive === 'normal'}
                   >Normal</button>
                   <button
-                    className={`rounded-xl border px-3 py-1.5 ${textActive === 'large' ? 'bg-slate-100 dark:bg-slate-800' : 'hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                    className={`rounded-xl border px-3 py-1.5 ${textActive === 'large' ? 'bg-slate-100 dark:bg-slate-800 dark:text-white' : 'hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-slate-100'}`}
                     onClick={() => setText('large')}
                     aria-pressed={textActive === 'large'}
                   >Large</button>
                   <button
-                    className={`rounded-xl border px-3 py-1.5 ${textActive === 'xlarge' ? 'bg-slate-100 dark:bg-slate-800' : 'hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                    className={`rounded-xl border px-3 py-1.5 ${textActive === 'xlarge' ? 'bg-slate-100 dark:bg-slate-800 dark:text-white' : 'hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-slate-100'}`}
                     onClick={() => setText('xlarge')}
                     aria-pressed={textActive === 'xlarge'}
                   >Extra large</button>
@@ -195,30 +198,30 @@ export default function AccessibilityMenu() {
                 <button
                   onClick={toggle('underlineLinks', 'Underline links')}
                   aria-pressed={state.underlineLinks}
-                  className={`rounded-xl border px-3 py-1.5 text-left ${state.underlineLinks ? 'bg-slate-100 dark:bg-slate-800' : 'hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                  className={`rounded-xl border px-3 py-1.5 text-left ${state.underlineLinks ? 'bg-slate-100 dark:bg-slate-800 dark:text-white' : 'hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-slate-100'}`}
                 >Underline links</button>
 
                 <button
                   onClick={toggle('highContrast', 'High contrast')}
                   aria-pressed={state.highContrast}
-                  className={`rounded-xl border px-3 py-1.5 text-left ${state.highContrast ? 'bg-slate-100 dark:bg-slate-800' : 'hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                  className={`rounded-xl border px-3 py-1.5 text-left ${state.highContrast ? 'bg-slate-100 dark:bg-slate-800 dark:text-white' : 'hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-slate-100'}`}
                 >High contrast</button>
 
                 <button
                   onClick={toggle('reduceMotion', 'Reduce motion')}
                   aria-pressed={state.reduceMotion}
-                  className={`rounded-xl border px-3 py-1.5 text-left ${state.reduceMotion ? 'bg-slate-100 dark:bg-slate-800' : 'hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                  className={`rounded-xl border px-3 py-1.5 text-left ${state.reduceMotion ? 'bg-slate-100 dark:bg-slate-800 dark:text-white' : 'hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-slate-100'}`}
                 >Reduce motion</button>
               </div>
 
               {/* Links & Reset */}
               <div className="flex flex-wrap gap-2 pt-2">
-                <a href="/accessibility" className="rounded-xl border px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-800">Accessibility statement</a>
-                <a href="mailto:jleecloak2011@gmail.com?subject=Accessibility%20feedback%20for%20Shadesblue" className="rounded-xl border px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-800">Report an issue</a>
-                <button onClick={reset} className="rounded-xl border px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-800">Reset</button>
+                <a href="/accessibility" className="rounded-xl border px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-slate-100">Accessibility statement</a>
+                <a href="mailto:jleecloak2011@gmail.com?subject=Accessibility%20feedback%20for%20Shadesblue" className="rounded-xl border px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-slate-100">Report an issue</a>
+                <button onClick={reset} className="rounded-xl border px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-slate-100">Reset</button>
               </div>
 
-              <p className="text-xs text-slate-500">Tip: Press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>A</kbd> to open this menu.</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Tip: Press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>A</kbd> to open this menu.</p>
             </div>
           </div>
         </div>

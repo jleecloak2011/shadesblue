@@ -17,11 +17,65 @@
     background: #000 !important;
     color: #fff !important;
   }
-  .a11y-high-contrast a { color: #00e5ff !important; }
-  .a11y-high-contrast * { border-color: #fff !important; }
+  .a11y-high-contrast * { 
+    border-color: #fff !important; 
+  }
   .a11y-high-contrast :focus-visible {
     outline: 3px solid #ff0 !important;
     outline-offset: 2px;
+  }
+  
+  /* Header - white text on blue background */
+  .a11y-high-contrast header,
+  .a11y-high-contrast header * {
+    color: #fff !important;
+  }
+  .a11y-high-contrast header button {
+    color: #000 !important;
+    background: #fff !important;
+  }
+  
+  /* Main content areas - white background with dark text */
+  .a11y-high-contrast main {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .a11y-high-contrast main *:not(a):not(button) {
+    color: #000 !important;
+  }
+  .a11y-high-contrast main a {
+    color: #343535 !important;
+    text-decoration: underline !important;
+  }
+  .a11y-high-contrast main button {
+    color: #000 !important;
+    background: #fff !important;
+  }
+  
+  /* Footer - white text on black background */
+  .a11y-high-contrast footer,
+  .a11y-high-contrast footer * {
+    background: #000 !important;
+    color: #fff !important;
+  }
+  
+  /* Accessibility menu - black background, white text */
+  .a11y-high-contrast [role="dialog"] {
+    background: #000 !important;
+  }
+  .a11y-high-contrast [role="dialog"] *:not([aria-pressed="true"]) {
+    color: #fff !important;
+    background: transparent !important;
+  }
+  .a11y-high-contrast [role="dialog"] button[aria-pressed="true"] {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  
+  /* Accessibility trigger button - white bg, black text */
+  .a11y-high-contrast button[aria-controls="a11y-menu"] {
+    background: #fff !important;
+    color: #000 !important;
   }
 
   /* Reduce motion */
@@ -35,6 +89,12 @@
 /* Also respect the user's OS preference by default */
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
+}
+
+/* Keep header links white regardless of theme */
+header a,
+.sb-header-dark a {
+  color: #fff !important;
 }
 
 /* Keep your existing dark mode, etc. */
@@ -76,3 +136,21 @@ body { background: theme(colors.slate.50); }
     background-repeat: no-repeat;
   }
 }
+
+/* Show pointer cursor for obvious click targets */
+a, button, [role="button"], [data-clickable] { cursor: pointer; }
+
+/* Optional: zoom affordance for zoomable images */
+[data-zoom] { cursor: zoom-in; }
+
+/* globals.css */
+.prose h2 {
+  @apply text-lg font-semibold text-slate-900 dark:text-slate-100 mt-0;
+}
+.prose h3 {
+  @apply text-base font-semibold text-slate-900 dark:text-slate-100;
+}
+.prose ul li { @apply leading-relaxed; }
+
+a, button, [role="button"], [data-clickable] { cursor: pointer; }
+[data-zoom] { cursor: zoom-in; }

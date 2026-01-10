@@ -19,6 +19,8 @@ export default function WhatIDo() {
           <h2 className="text-xl font-semibold">Front-end</h2>
           <ul className="mt-2 list-disc pl-5 text-slate-600 dark:text-slate-300 text-sm">
             <li>Next.js + React (App Router)</li>
+            <li>Angular (v2+), AngularJS (legacy)</li>
+            <li>TypeScript, RxJS (where applicable)</li>
             <li>Tailwind, responsive layouts, dark mode</li>
             <li>Accessible nav, focus management, ARIA</li>
           </ul>

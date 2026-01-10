@@ -1,35 +1,63 @@
 // app/portfolio/page.tsx
-import ProjectCard from '@/components/ProjectCard';
-import PortfolioFilters from '@/components/PortfolioFilters';
-import { listProjects } from '@/lib/projects';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import PortfolioClient from '@/components/PortfolioClient';
 
-export const metadata = {
+export const dynamic = 'force-static';
+
+export const metadata: Metadata = {
   title: 'Portfolio · Shadesblue',
   description: 'Selected projects and demos by Jason Martin.',
 };
 
-export default function PortfolioPage({ searchParams }: { searchParams: { source?: string; q?: string } }) {
-  const source = (searchParams.source ?? 'all') as any;
-  const q = searchParams.q ?? '';
-  const items = listProjects({ source, q });
-  const hasItems = items.length > 0;
-
+export default function PortfolioPage() {
   return (
-    <section className="container mx-auto px-4 py-12">
-      <h1 className="text-3xl font-semibold mb-2">Portfolio</h1>
-      <p className="text-slate-600 dark:text-slate-300 mb-6">Employment projects, client work, and personal demos.</p>
+    <section className="container mx-auto px-4 pt-24 md:pt-28 pb-12">
+      <h1 className="text-3xl font-semibold tracking-tight">Portfolio</h1>
+      <p className="text-slate-600 dark:text-slate-300 mt-1">
+        Selected launches for a large K-12 district—faster pages, accessible UI, and editor-friendly workflows.
+      </p>
 
-      <PortfolioFilters total={items.length} />
+      {/* Top CTAs */}
+      <div className="mt-3 flex flex-wrap gap-3">
+        <Link
+          href="/resume.pdf"
+          className="inline-flex items-center gap-2 h-11 px-4 rounded-xl border border-slate-300 text-slate-900 dark:text-white dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer"
+          aria-label="Open résumé PDF"
+        >
+          Résumé <span aria-hidden>↗</span>
+        </Link>
+        <Link
+          href="/contact"
+          className="inline-flex items-center gap-2 h-11 px-4 rounded-xl bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-white/90 cursor-pointer"
+          aria-label="Go to contact page"
+        >
+          Contact
+        </Link>
+      </div>
 
-      {hasItems ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map(p => <ProjectCard key={p.slug} project={p} />)}
-        </div>
-      ) : (
-        <div className="rounded-2xl border p-8 text-slate-500">
-          No projects matched your filters. Try clearing the search or switching the source.
-        </div>
-      )}
+      {/* Client-side filtering & grid */}
+      <div className="mt-6">
+        <PortfolioClient />
+      </div>
+
+      {/* Bottom CTAs */}
+      <div className="mt-10 flex flex-wrap gap-3">
+        <Link
+          href="/resume.pdf"
+          className="inline-flex items-center gap-2 h-11 px-4 rounded-xl border border-slate-300 text-slate-900 dark:text-white dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer"
+          aria-label="Open résumé PDF"
+        >
+          Résumé <span aria-hidden>↗</span>
+        </Link>
+        <Link
+          href="/contact"
+          className="inline-flex items-center gap-2 h-11 px-4 rounded-xl bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-white/90 cursor-pointer"
+          aria-label="Go to contact page"
+        >
+          Contact
+        </Link>
+      </div>
     </section>
   );
 }

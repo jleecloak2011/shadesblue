@@ -5,14 +5,16 @@ export default function Contact() {
       <p className="text-slate-600 dark:text-slate-300 mb-6">
         Book a quick intro call or send a note. I’ll reply within one business day.
       </p>
-      <div className="flex gap-3">
-        <a href="mailto:jleecloak2011@gmail.com" className="rounded-2xl bg-brand-blue text-white px-4 py-2">
+      <div className="flex flex-wrap gap-3">
+        <a href="mailto:jleecloak2011@gmail.com" className="rounded-2xl border px-4 py-2">
           Email
         </a>
-        <a href="https://calendly.com" target="_blank" rel="noreferrer" className="rounded-2xl border px-4 py-2">
-          Book a call
+        <a href="https://www.linkedin.com/in/jason-martin-sb" target="_blank" className="rounded-2xl border px-4 py-2">
+          LinkedIn
         </a>
+
       </div>
+
     </section>
   );
 }
